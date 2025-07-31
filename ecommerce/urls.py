@@ -18,13 +18,6 @@ from django.contrib import admin
 from django.urls import path ,include
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
-    path('accounts/', include('accounts.urls')),
-    # path('products/', include('products.urls')),
-    # path('cart/', include('cart.urls')),
-    # path('orders/', include('orders.urls')),
-=======
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
->>>>>>> 792ab0b (add cart and checkout pages)
 ]
