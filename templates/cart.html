@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container mt-5">
+    <h2 class="mb-4">🛒 Shopping Cart</h2>
+    {% if cart_items %}
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td><img src="{{ item.image }}" class="img-thumbnail" width="60"></td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.price }}</td>
+            <td>${{ item.total }}</td>
+            <td><button class="btn btn-sm btn-outline-danger">Remove</button></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <h4>Total: <strong>${{ total_price }}</strong></h4>
+        <a href="/checkout/" class="btn btn-success mt-3">Proceed to Checkout</a>
+    </div>
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+    </div>
+
+</body>
+</html>
