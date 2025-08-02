@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Gitmarket</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Gitmarket</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form method="GET" action="" class="search-container mx-auto">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="form-control search-input" name="search" placeholder="Search products...">
+                </form>
+                
+                <div class="d-flex gap-2 ms-auto">
+                    {% if user.is_authenticated %}
+                        <a href="" class="btn btn-custom btn-signin">
+                            <i class="fas fa-shopping-cart me-1"></i>Cart ({{ cart_count }})
+                        </a>
+                        <a href="" class="btn btn-custom btn-signup">Logout</a>
+                    {% else %}
+                        <a href="" class="btn btn-custom btn-signin">Sign In</a>
+                        <a href="" class="btn btn-custom btn-signup">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">Home</a></li>
+                    <li class="breadcrumb-item"><a href="">Products</a></li>
+                    <li class="breadcrumb-item"><a href="">{{ product.category.name }}</a></li>
+                    <li class="breadcrumb-item active">{{ product.name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Success Message -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>{{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Product Detail -->
+            <div class="product-detail-container">
+                <div class="product-detail-grid">
+                    <!-- Product Image -->
+                    <div class="product-image-section">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div style="color: white; font-size: 5rem;">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        {% endif %}
+
+                        {% if product.is_featured %}
+                            <div class="product-badge-detail">Featured</div>
+                        {% elif product.stock < 10 and product.stock > 0 %}
+                            <div class="product-badge-detail">Low Stock</div>
+                        {% elif product.stock == 0 %}
+                            <div class="product-badge-detail" style="background: rgba(239, 68, 68, 0.9);">Out of Stock</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="product-info-section">
+                        <div class="product-category-detail">{{ product.category.name }}</div>
+                        <h1 class="product-title-detail">{{ product.name }}</h1>
+
+                        {% if product.rating %}
+                            <div class="product-rating-detail">
+                                <div class="stars-detail">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= product.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <span class="rating-text-detail">({{ product.rating }} out of 5)</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="product-price-detail">${{ product.price }}</div>
+
+                        <p class="product-description-detail">{{ product.description }}</p>
+
+                        <!-- Product Meta -->
+                        <div class="product-meta">
+                            <div class="meta-item">
+                                <div class="meta-label">Stock</div>
+                                <div class="meta-value">
+                                    {% if product.stock > 10 %}
+                                        <span class="stock-status in-stock">In Stock</span>
+                                    {% elif product.stock > 0 %}
+                                        <span class="stock-status low-stock">{{ product.stock }} left</span>
+                                    {% else %}
+                                        <span class="stock-status out-of-stock">Out of Stock</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">SKU</div>
+                                <div class="meta-value">{{ product.sku|default:"N/A" }}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Seller</div>
+                                <div class="meta-value">{{ product.seller.get_full_name|default:product.seller.username }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart Form -->
+                        {% if user.is_authenticated and user.role == 'buyer' %}
+                            <form method="POST" action="{% url 'cart:add' product.id %}">
+                                {% csrf_token %}
+                                <div class="product-actions">
+                                    <div class="quantity-section">
+                                        <label class="quantity-label">Qty:</label>
+                                        <input type="number" name="quantity" class="quantity-input" 
+                                               value="1" min="1" max="{{ product.stock }}" 
+                                               {% if product.stock == 0 %}disabled{% endif %}>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn-add-to-cart" 
+                                            {% if product.stock == 0 %}disabled{% endif %}>
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        {% if product.stock == 0 %}
+                                            Out of Stock
+                                        {% else %}
+                                            Add to Cart
+                                        {% endif %}
+                                    </button>
+
+                                    <a href="" class="btn-wishlist-detail">
+                                        <i class="fas fa-heart"></i>
+                                    </a>
+                                </div>
+                            </form>
+                        {% elif not user.is_authenticated %}
+                            <div class="product-actions">
+                                <a href="" class="btn-add-to-cart">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login to Purchase
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="product-actions">
+                                <button class="btn-add-to-cart" disabled>
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    {% if user.role == 'seller' %}
+                                        Sellers cannot purchase products
+                                    {% else %}
+                                        Contact seller directly
+                                    {% endif %}
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            {% if related_products %}
+                <div class="related-products">
+                    <div class="section-title">
+                        <h2>Related Products</h2>
+                    </div>
+
+                    <div class="related-grid">
+                        {% for related_product in related_products %}
+                            <a href="" class="related-card">
+                                <div class="related-image">
+                                    {% if related_product.image %}
+                                        <img src="" alt="">
+                                    {% else %}
+                                        <div style="display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; height: 100%;">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="related-info">
+                                    <h4 class="related-title">{{ related_product.name|truncatechars:30 }}</h4>
+                                    <div class="related-price">${{ related_product.price }}</div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
