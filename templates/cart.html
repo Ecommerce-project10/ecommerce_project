@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Gitmarket</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet">
+    
+    {% load static %}
+    <!-- Your CSS files -->
+    <link href="{% static 'css/products.css' %}" rel="stylesheet">
+    <link href="{% static 'cart.css' %}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (you can replace this with your existing nav) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#" style="color: var(--primary);">
+                <i class="fas fa-store me-2"></i>Gitmarket
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="products.html">Products</a>
+                <a class="nav-link active" href="cart.html">
+                    <i class="fas fa-shopping-cart me-1"></i>Cart (3)
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Header -->
+    <section class="cart-header">
+        <div class="container ">
+            <h1><i class="fas fa-shopping-cart me-3 mt-5"></i>Shopping Cart</h1>
+            <p class="cart-count">3 items in your cart</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Success Alert (if item was added) -->
+            <div class="alert alert-success d-none" id="cartAlert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="alertMessage">Item updated successfully!</span>
+            </div>
+
+            <div class="cart-container">
+                <!-- Cart Items Section -->
+                <div class="cart-items-section">
+                    <div class="cart-items-header">
+                        <h3 class="cart-items-title">Your Items</h3>
+                        <button class="clear-cart-btn" onclick="clearCart()">
+                            <i class="fas fa-trash me-1"></i>Clear Cart
+                        </button>
+                    </div>
+
+                    <!-- Cart Item 1 -->
+                    <div class="cart-item" data-id="1">
+                        <div class="cart-item-image">
+                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop" alt="Nike Sneakers">
+                        </div>
+                        <div class="cart-item-details">
+                            <h4 class="cart-item-title">Premium Nike Sneakers</h4>
+                            <p class="cart-item-category">Footwear</p>
+                            <p class="cart-item-price">$159.99</p>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="cart-quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(1, -1)">−</button>
+                                <span class="cart-quantity-display" id="qty-1">2</span>
+                                <button class="quantity-btn" onclick="updateQuantity(1, 1)">+</button>
+                            </div>
+                            <button class="remove-item-btn" onclick="removeItem(1)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <h3 class="summary-title">Order Summary</h3>
+                    
+                    <div class="summary-row">
+                        <span class="summary-label">Subtotal (4 items)</span>
+                        <span class="summary-value" id="subtotal">$709.97</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span class="summary-label">Shipping</span>
+                        <span class="summary-value" id="shipping">$15.00</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span class="summary-label">Tax</span>
+                        <span class="summary-value" id="tax">$56.80</span>
+                    </div>
+
+                    <!-- Promo Code Section -->
+                    <div class="promo-code-section">
+                        <div class="promo-input-group">
+                            <input type="text" class="promo-input" placeholder="Enter promo code" id="promoCode">
+                            <button class="apply-promo-btn" onclick="applyPromoCode()">Apply</button>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-row summary-total">
+                        <span class="summary-label">Total</span>
+                        <span class="summary-value" id="total">$781.77</span>
+                    </div>
+                    
+                    <button class="checkout-btn" onclick="proceedToCheckout()">
+                        <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Continue Shopping -->
+            <div class="continue-shopping">
+                <a href="products.html" class="continue-shopping-btn">
+                    <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+
+            <!-- Saved Items Section -->
+            <div class="saved-items-section">
+                <h3 class="saved-items-title">
+                    <i class="fas fa-heart me-2"></i>Saved for Later
+                </h3>
+                <div class="saved-items-grid">
+                    <div class="saved-item-card">
+                        <div class="saved-item-image">
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" alt="Headphones">
+                        </div>
+                        <h5 class="saved-item-title">Wireless Headphones</h5>
+                        <p class="saved-item-price">$199.99</p>
+                        <button class="move-to-cart-btn" onclick="moveToCart(4)">Move to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Empty Cart Template (hidden by default) -->
+    <div class="empty-cart d-none" id="emptyCartTemplate">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Your cart is empty</h3>
+        <p>Looks like you haven't added anything to your cart yet.</p>
+        <a href="products.html" class="shop-now-btn">
+            <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+        </a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
