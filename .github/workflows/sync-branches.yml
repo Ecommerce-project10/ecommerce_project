@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout main branch
+      - name: Checkout main
         uses: actions/checkout@v3
         with:
           ref: main
@@ -19,6 +19,10 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
+
+      - name: Set up GitHub credentials
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Fetch all branches
         run: git fetch --all
@@ -29,7 +33,8 @@ jobs:
 
           for branch in "${TARGET_BRANCHES[@]}"
           do
-            git checkout $branch
-            git merge origin/main --no-edit || echo "❗ Merge conflict in $branch"
-            git push origin $branch
+            echo "🔁 Syncing $branch"
+            git checkout $branch || git checkout -b $branch origin/$branch
+            git merge origin/main --allow-unrelated-histories --no-edit || echo "❗ Merge conflict in $branch"
+            git push origin $branch || echo "⚠️ Failed to push $branch"
           done
