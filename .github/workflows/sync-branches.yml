@@ -1,0 +1,35 @@
+name: Sync Branches
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Sync branches
+        run: |
+          TARGET_BRANCHES=("Abdulrahman" "Zeyad" "Shimaa" "Hamada" "Yara")
+
+          for branch in "${TARGET_BRANCHES[@]}"
+          do
+            git checkout $branch
+            git merge origin/main --no-edit || echo "❗ Merge conflict in $branch"
+            git push origin $branch
+          done
