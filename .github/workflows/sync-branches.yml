@@ -1,4 +1,4 @@
-name: Sync Branches
+name: Sync Branches via PR
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  sync-branches:
+  sync-branches-pr:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,21 +20,34 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
 
-      - name: Set up GitHub credentials
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      - name: Create PRs to sync branches
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Sync branch with main'
+          branch: 'sync/update-${{ github.ref_name }}'  # will override below in loop
+          title: 'Sync with main branch'
+          body: |
+            Automated PR to sync this branch with main.
+          labels: sync, automated
 
-      - name: Fetch all branches
-        run: git fetch --all
-
-      - name: Sync branches
+      - name: Sync branches with PRs
         run: |
           TARGET_BRANCHES=("Abdulrahman" "Zeyad" "Shimaa" "Hamada" "Yara")
 
           for branch in "${TARGET_BRANCHES[@]}"
           do
-            echo "🔁 Syncing $branch"
-            git checkout $branch || git checkout -b $branch origin/$branch
-            git merge origin/main --allow-unrelated-histories --no-edit || echo "❗ Merge conflict in $branch"
-            git push origin $branch || echo "⚠️ Failed to push $branch"
+            echo "🔁 Creating PR to sync $branch"
+            git checkout main
+            git pull origin main
+            git checkout -b "sync/update-$branch"
+            git push --set-upstream origin "sync/update-$branch"
+
+            gh pr create \
+              --base "$branch" \
+              --head "sync/update-$branch" \
+              --title "Sync $branch with main" \
+              --body "Automated PR to merge updates from main branch into $branch." || echo "PR creation failed or already exists"
           done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
