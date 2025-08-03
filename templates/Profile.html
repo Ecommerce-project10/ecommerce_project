@@ -1,0 +1,169 @@
+{% extends 'navbar.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+{% block title %}Profile - Gitmarket{% endblock %}
+
+{% block content %}
+<script
+  src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js"
+  type="module"
+></script>
+<div class="container py-5">
+    <div class="row">
+        <!-- Profile Info Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <img src="{% static 'images/profile.png' %}" 
+                             alt="Profile Avatar" 
+                             class="rounded-circle img-fluid" 
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <h4 class="card-title fw-bolder text-uppercase">{{ user.get_full_name|default:user.username }}</h4>
+                    <p class="badge bg-secondary fs-6">@{{ user.username }}</p>
+
+                    <div class="mt-4">
+                        <p class="mb-1"><strong>Email:</strong> {{ user.email }}</p>
+                        <p class="mb-1"><strong>Member Since:</strong> {{ user.date_joined|date:"F Y" }}</p>
+                        <p class="mb-0"><strong>Last Login:</strong> {{ user.last_login|date:"d M Y, H:i" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Type Card -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Account Information</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Account Type</span>
+                        <span class="badge bg-success fs-6">
+                            {{ user.profile.account_type|title }}
+                        </span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Account Status</span>
+                        <span class="badge bg-success fs-7 d-flex align-items-center">Active
+                            <dotlottie-wc
+                            src="https://lottie.host/0ae40647-ed2c-4062-a00f-8d12e751acb5/wVaEroTnKG.lottie"
+                            style="width: 25px;height: 25px"
+                            speed="2"
+                            autoplay
+                            loop
+                            ></dotlottie-wc>
+                        </span>
+                        <span class="badge fs-7 ms-1" style="background-color: #00000055;">Blocked</span>
+                        <span class="badge fs-7 ms-1" style="background-color: #00000055;">Inactive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Edit Form -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0">Edit Profile</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- User Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-muted mb-3 fw-bolder text-uppercase">Account Information</h6>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.username.id_for_label }}" class="form-label fw-bold">Username:</label>
+                                {{ user.username }}
+                                {% if user_form.username.errors %}
+                                    <div class="text-danger">{{ user_form.username.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.email.id_for_label }}" class="form-label fw-bold">Email:</label>
+                                {{ user.email }}
+                                {% if user_form.email.errors %}
+                                    <div class="text-danger">{{ user_form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.first_name.id_for_label }}" class="form-label fw-bold">First Name:</label>
+                                {{ user.first_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.last_name.id_for_label }}" class="form-label fw-bold">Last Name:</label>
+                                {{ user.last_name }}
+                            </div>
+                        </div>
+                        
+                        <!-- Profile Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-muted mb-3 fw-bolder">Profile Settings</h6>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ profile_form.account_type.id_for_label }}" class="form-label fw-bold">Account Type:</label>
+                                {{ user.profile.account_type }}
+                                <div class="form-text">
+                                    Changing account type may affect your access to certain features.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'home' %}" class="btn btn-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Seller Tools (if applicable) -->
+            {% if user.profile.account_type == 'seller' %}
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Seller Tools</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>Add New Product
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fas fa-box me-2"></i>My Products
+                        </a>
+                        <a href="#" class="btn btn-outline-info">
+                            <i class="fas fa-chart-line me-2"></i>Seller Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Customer Tools (if applicable) -->
+            {% if user.profile.account_type == 'customer' %}
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Customer Tools</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fas fa-heart me-2"></i>My Wishlist
+                        </a>
+                        <a href="#" class="btn btn-outline-info">
+                            <i class="fas fa-shopping-bag me-2"></i>My Orders
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

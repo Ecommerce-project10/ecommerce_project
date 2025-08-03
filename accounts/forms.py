@@ -1,39 +1,25 @@
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
-
-class UserRegistrationForm(forms.Form):
-    first_name = forms.CharField(
-        max_length=30, 
-        required=True, 
-        widget=forms.TextInput()
-    )
-    last_name = forms.CharField(
-        max_length=30, 
-        required=True, 
-        widget=forms.TextInput()
-    )
-    username = forms.CharField(
-        max_length=150, 
-        required=True, 
-        widget=forms.TextInput()
-    )
-    email = forms.EmailField(
-        required=True, 
-        widget=forms.EmailInput()
-    )
-    password = forms.CharField(
-        required=True, 
-        widget=forms.PasswordInput()
-    )
-    account_type = forms.ChoiceField(
-        choices=(
-            ('customer', 'Customer - Browse and buy products'),
-            ('seller', 'Seller - List and sell products'),
-        ),
-        required=True,
-        widget=forms.Select(attrs={'class': 'form-select'})
-    )
+from accounts.models import Create_USER 
+class UserRegistrationForm(ModelForm):
+    account_type = forms.ChoiceField(choices=Create_USER.ACCOUNT_TYPES,
+                                     required= True,
+                                     widget=forms.TextInput
+                                     )
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email', 'first_name', 'last_name']
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+            Create_USER.objects.create(user=user, account_type=self.cleaned_data['account_type'])
+        return user
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
