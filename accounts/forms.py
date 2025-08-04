@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
 from accounts.models import Create_USER 
+
 class UserRegistrationForm(ModelForm):
     account_type = forms.ChoiceField(choices=Create_USER.ACCOUNT_TYPES,
                                      required= True,
