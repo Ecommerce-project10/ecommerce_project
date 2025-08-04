@@ -9,7 +9,6 @@ from accounts.models import Create_USER
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from products.views import products
 
 # Create your views here.
 def home(request):
@@ -23,7 +22,6 @@ def register(request):
             messages.success(request, 'Registration successful. You can now log in.')
             return redirect('login')
         else:
-            # Useful to show form errors if any
             for field in form.errors:
                 for error in form.errors[field]:
                     messages.error(request, f"{field}: {error}")
