@@ -15,6 +15,13 @@
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
+                    <dotlottie-wc
+                        src="https://lottie.host/436a95dd-8ba8-4c83-a558-e435db7e40f4/gIJXL5Oh26.lottie"
+                        style="width: 70px; height: 70px;"
+                        speed="2"
+                        autoplay
+                        loop
+                    ></dotlottie-wc>
                     <div class="mb-3">
                         <img src="{% static 'images/profile.png' %}" 
                              alt="Profile Avatar" 
@@ -77,25 +84,25 @@
                                 <h6 class="text-muted mb-3 fw-bolder text-uppercase">Account Information</h6>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="{{ user_form.username.id_for_label }}" class="form-label fw-bold">Username:</label>
+                                <label for="{{ user.username.id_for_label }}" class="form-label fw-bold">Username:</label>
                                 {{ user.username }}
-                                {% if user_form.username.errors %}
-                                    <div class="text-danger">{{ user_form.username.errors }}</div>
+                                {% if user.username.errors %}
+                                    <div class="text-danger">{{ user.username.errors }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="{{ user_form.email.id_for_label }}" class="form-label fw-bold">Email:</label>
+                                <label for="{{ user.email.id_for_label }}" class="form-label fw-bold">Email:</label>
                                 {{ user.email }}
-                                {% if user_form.email.errors %}
-                                    <div class="text-danger">{{ user_form.email.errors }}</div>
+                                {% if user.email.errors %}
+                                    <div class="text-danger">{{ user.email.errors }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="{{ user_form.first_name.id_for_label }}" class="form-label fw-bold">First Name:</label>
+                                <label for="{{ user.first_name.id_for_label }}" class="form-label fw-bold">First Name:</label>
                                 {{ user.first_name }}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="{{ user_form.last_name.id_for_label }}" class="form-label fw-bold">Last Name:</label>
+                                <label for="{{ user.last_name.id_for_label }}" class="form-label fw-bold">Last Name:</label>
                                 {{ user.last_name }}
                             </div>
                         </div>
@@ -137,7 +144,7 @@
                         <a href="#" class="btn btn-outline-primary">
                             <i class="fas fa-box me-2"></i>My Products
                         </a>
-                        <a href="#" class="btn btn-outline-info">
+                        <a href="#" class="btn btn-outline-secondary">
                             <i class="fas fa-chart-line me-2"></i>Seller Dashboard
                         </a>
                     </div>
@@ -156,7 +163,7 @@
                         <a href="#" class="btn btn-outline-primary">
                             <i class="fas fa-heart me-2"></i>My Wishlist
                         </a>
-                        <a href="#" class="btn btn-outline-info">
+                        <a href="#" class="btn btn-outline-secondary">
                             <i class="fas fa-shopping-bag me-2"></i>My Orders
                         </a>
                     </div>
