@@ -47,8 +47,8 @@
                         <label for="category">Category</label>
                         <select name="category" id="category" class="filter-select">
                             <option value="">All Categories</option>
-                            {% for category in product.category %}
-                                <option value="{{ category.id }}" 
+                            {% for product in products %}
+                                <option value="{{ product.category }}" 
                                     {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
                                     {{ category }}
                                 </option>
@@ -71,10 +71,10 @@
                     <div class="filter-group">
                         <label for="sort_by">Sort By</label>
                         <select name="sort_by" id="sort_by" class="filter-select">
-                            <option value="created_at" {% if request.GET.sort_by == 'created_at' %}selected{% endif %}>
+                            <option value="product.created_at" {% if request.GET.sort_by == 'created_at' %}selected{% endif %}>
                                 Newest First
                             </option>
-                            <option value="price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>
+                            <option value="product.price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>
                                 Price: Low to High
                             </option>
                             <option value="-price" {% if request.GET.sort_by == '-price' %}selected{% endif %}>
@@ -124,11 +124,17 @@
                                         <i class="fas fa-image"></i>
                                     </div>
                                 {% endif %}
-                                
-                                {% if product.is_featured %}
-                                    <div class="product-badge">Featured</div>
-                                {% elif product.stock < 10 %}
+                                <i class="fas fa-shopping-cart">dfge</i>
+                                {% if product.quantity > 10 %}
+                                    <div class="product-badge" style="background-color: #16a34a;">Featured</div>
+                                {% elif product.quantity == 0 %}
+                                    <div class="product-badge" style="background-color: #ef4444e6;">Out of Stock</div>
+                                {% elif product.quantity < 10 %}
                                     <div class="product-badge">Low Stock</div>
+                                {% endif %}
+
+                                {% if product.discount %}
+                                    <div class="product-discount">-{{ product.discount }}%</div>
                                 {% endif %}
                             </div>
                             
@@ -141,7 +147,7 @@
                                     <div class="product-rating">
                                         <div class="stars">
                                             {% for i in "12345" %}
-                                                {% if forloop.counter <= product.rating %}
+                                                {% if forloop.counter <= product.rate %}
                                                     <i class="fas fa-star"></i>
                                                 {% else %}
                                                     <i class="far fa-star"></i>
