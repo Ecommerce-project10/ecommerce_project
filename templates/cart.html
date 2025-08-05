@@ -3,49 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Gitmarket</title>
+    <title>{{ product.title }} Cart - Gitmarket</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet">
-    
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     {% load static %}
-    <!-- Your CSS files -->
-    <link href="{% static 'css/products.css' %}" rel="stylesheet">
-    <link href="{% static 'cart.css' %}" rel="stylesheet">
-
-    <style>
-        :root {
-            --primary: #6366f1;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --light: #f8fafc;
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
 </head>
 <body>
-    <!-- Navigation (you can replace this with your existing nav) -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#" style="color: var(--primary);">
-                <i class="fas fa-store me-2"></i>Gitmarket
-            </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="products.html">Products</a>
-                <a class="nav-link active" href="cart.html">
-                    <i class="fas fa-shopping-cart me-1"></i>Cart (3)
-                </a>
-            </div>
-        </div>
-    </nav>
-
+    {% include 'navbar.html' %}
     <!-- Cart Header -->
     <section class="cart-header">
-        <div class="container ">
+        <div class="container">
             <h1><i class="fas fa-shopping-cart me-3 mt-5"></i>Shopping Cart</h1>
             <p class="cart-count">3 items in your cart</p>
         </div>
@@ -125,9 +96,11 @@
                         <span class="summary-value" id="total">$781.77</span>
                     </div>
                     
-                    <button class="checkout-btn" onclick="proceedToCheckout()">
-                        <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
-                    </button>
+                    <a href="{% url 'checkout' %}">
+                        <button class="checkout-btn" onclick="proceedToCheckout()">
+                            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                        </button>
+                    </a>
                 </div>
             </div>
 
@@ -157,17 +130,15 @@
         </div>
     </main>
 
-    <!-- Empty Cart Template (hidden by default) -->
-    <div class="empty-cart d-none" id="emptyCartTemplate">
+    
+    <div class="empty-cart d-none">
         <i class="fas fa-shopping-cart"></i>
         <h3>Your cart is empty</h3>
         <p>Looks like you haven't added anything to your cart yet.</p>
-        <a href="products.html" class="shop-now-btn">
+        <a href="{% url 'products' %}" class="shop-now-btn">
             <i class="fas fa-shopping-bag me-2"></i>Start Shopping
         </a>
     </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
