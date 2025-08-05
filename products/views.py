@@ -9,23 +9,16 @@ from .forms import ProductForm
 from .models import Product
 import cloudinary
 import cloudinary.uploader
-# import dotenv
-# import os
+import dotenv
+import os
 
-# # Load environment variables from .env file
-# dotenv.load_dotenv()
-# # Configure Cloudinary with environment variables
-# cloudinary.config( 
-#     cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"), 
-#     api_key = os.getenv("CLOUDINARY_API_KEY"), 
-#     api_secret = os.getenv("CLOUDINARY_API_SECRET"),
-#     secure=True
-# )
-
+# Load environment variables from .env file
+dotenv.load_dotenv()
+# Configure Cloudinary with environment variables
 cloudinary.config( 
-    cloud_name = "dl0hsdl8i", 
-    api_key = "686294187252397", 
-    api_secret = "2PKhr8w1gvakug1_0xRLYSU0dWo",
+    cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"), 
+    api_key = os.getenv("CLOUDINARY_API_KEY"), 
+    api_secret = os.getenv("CLOUDINARY_API_SECRET"),
     secure=True
 )
 
