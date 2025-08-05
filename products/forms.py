@@ -2,17 +2,11 @@ from django import forms
 from .models import Product
 
 class ProductForm(forms.ModelForm):
+    image= forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'image', 'category']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control'}),
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-select'}),
-        }
-
+        fields = ['name', 'description', 'price', 'category']
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)  
         super().__init__(*args, **kwargs)

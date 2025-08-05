@@ -25,6 +25,22 @@
     <!-- Filters Section -->
     <div class="filters-section">
         <div class="container">
+            {% if messages %}
+                <div class="mb-3">
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {% elif message.tags == "debug" %}
+                        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                        {% else %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {% endif %}
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="filter-card">
                 <form method="GET" class="filter-form">
                     <div class="filter-group">
@@ -99,10 +115,10 @@
             {% if products %}
                 <div class="products-grid">
                     {% for product in products %}
-                        <a href="" class="product-card">
+                        <a href="{% url 'product_detail' product.id %}" class="product-card">
                             <div class="product-image">
                                 {% if product.image %}
-                                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                    <img src="{{ product.image }}" alt="{{ product.name }}">
                                 {% else %}
                                     <div style="background: var(--gradient); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
                                         <i class="fas fa-image"></i>
