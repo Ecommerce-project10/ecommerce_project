@@ -12,21 +12,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import dj_database_url
-# import dotenv
-# import os
+import dotenv
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# dotenv.load_dotenv(BASE_DIR / '.env')
-# DATABASE_URL = os.getenv('DATABASE_URL')
+dotenv.load_dotenv(BASE_DIR / '.env')
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-fg7%ckhcba9h#nr)oje@-cnn@b_&_7c-23c7&9+be8cm$)$(=g'
-# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -92,19 +91,11 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://neondb_owner:npg_veZdcK73Tkwr@ep-sparkling-star-a2vunodr-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+        default=DATABASE_URL,
         conn_max_age=600,
         ssl_require=True,
     )
 }
-
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=DATABASE_URL,
-#         conn_max_age=600,
-#         ssl_require=True,
-#     )
-# }
 
 
 # Password validation
