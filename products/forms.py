@@ -6,7 +6,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'category']
+        fields = ['name', 'description', 'price', 'category', 'quantity']
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)  
         super().__init__(*args, **kwargs)

@@ -47,10 +47,10 @@
                         <label for="category">Category</label>
                         <select name="category" id="category" class="filter-select">
                             <option value="">All Categories</option>
-                            {% for category in categories %}
+                            {% for category in product.category %}
                                 <option value="{{ category.id }}" 
                                     {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ category.name }}
+                                    {{ category }}
                                 </option>
                             {% endfor %}
                         </select>
@@ -133,11 +133,11 @@
                             </div>
                             
                             <div class="product-info">
-                                <div class="product-category">{{ product.category.name }}</div>
+                                <div class="product-category">{{ product.category }}</div>
                                 <h3 class="product-title">{{ product.name }}</h3>
                                 <p class="product-description">{{ product.description|truncatewords:15 }}</p>
                                 
-                                {% if product.rating %}
+                                {% if product.rate %}
                                     <div class="product-rating">
                                         <div class="stars">
                                             {% for i in "12345" %}
@@ -148,7 +148,7 @@
                                                 {% endif %}
                                             {% endfor %}
                                         </div>
-                                        <span class="rating-text">({{ product.rating }})</span>
+                                        <span class="rating-text">({{ product.rate }})</span>
                                     </div>
                                 {% endif %}
                                 

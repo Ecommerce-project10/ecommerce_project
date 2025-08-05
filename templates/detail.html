@@ -52,12 +52,12 @@
                             </div>
                         {% endif %}
 
-                        {% if product.is_featured %}
+                        {% if product.quantity %}
                             <div class="product-badge-detail">Featured</div>
-                        {% elif product.stock < 10 and product.stock > 0 %}
+                        {% elif product.quantity < 10 and product.quantity > 0 %}
                             <div class="product-badge-detail">Low Stock</div>
-                        {% elif product.stock == 0 %}
-                            <div class="product-badge-detail" style="background: rgba(239, 68, 68, 0.9);">Out of Stock</div>
+                        {% elif product.quantity == 0 %}
+                            <div class="product-badge-detail" style="background: #ef4444e6;">Out of Stock</div>
                         {% endif %}
                     </div>
 
@@ -66,18 +66,18 @@
                         <div class="product-category-detail">{{ product.category.name }}</div>
                         <h1 class="product-title-detail">{{ product.name }}</h1>
 
-                        {% if product.rating %}
+                        {% if product.rate %}
                             <div class="product-rating-detail">
                                 <div class="stars-detail">
                                     {% for i in "12345" %}
-                                        {% if forloop.counter <= product.rating %}
+                                        {% if forloop.counter <= product.rate %}
                                             <i class="fas fa-star"></i>
                                         {% else %}
                                             <i class="far fa-star"></i>
                                         {% endif %}
                                     {% endfor %}
                                 </div>
-                                <!-- <span class="rating-text-detail">({{ product.rating }} out of 5)</span> -->
+                                <span class="rating-text-detail">({{ product.rate }} out of 5)</span>
                             </div>
                         {% endif %}
 
@@ -90,10 +90,12 @@
                             <div class="meta-item">
                                 <div class="meta-label">Stock</div>
                                 <div class="meta-value">
-                                    {% if product.stock > 10 %}
+                                    {% if product.quantity > 50 %}
                                         <span class="stock-status in-stock">In Stock</span>
-                                    {% elif product.stock > 0 %}
-                                        <span class="stock-status low-stock">{{ product.stock }} left</span>
+                                    {% elif product.quantity < 50 and product.quantity > 10 %}
+                                        <span class="stock-status in-stock">In Stock({{ product.quantity }})</span>
+                                    {% elif product.quantity > 0 %}
+                                        <span class="stock-status low-stock">{{ product.quantity }} left</span>
                                     {% else %}
                                         <span class="stock-status out-of-stock">Out of Stock</span>
                                     {% endif %}
