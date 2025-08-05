@@ -141,15 +141,16 @@
                             </div>
                         {% else %}
                             <div class="product-actions">
-                                <button class="btn-add-to-cart" disabled>
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    {% if user.profile.account_type == 'seller' %}
-                                        Sellers cannot purchase products
+                                {% if user.profile.account_type == 'customer' %}
+                                    <button class="btn-add-to-cart"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
+                                    {% elif user.profile.account_type == 'seller' %}
+                                    {% if product.user == user %}
+                                        <button class="btn-add-to-cart" disabled>You are the owner can't add to cart</button>
+                                        <a href=""><button class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i></button></a>
                                     {% else %}
                                         <button class="btn-add-to-cart"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
-                                        Contact seller directly
                                     {% endif %}
-                                </button>
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>

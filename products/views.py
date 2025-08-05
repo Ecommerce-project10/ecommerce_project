@@ -11,7 +11,6 @@ import cloudinary
 import cloudinary.uploader
 import dotenv
 import os
-
 # Load environment variables from .env file
 dotenv.load_dotenv()
 # Configure Cloudinary with environment variables
