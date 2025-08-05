@@ -217,8 +217,8 @@
     color: white;
 }
 
+
 .btn-add-to-cart:disabled {
-    background: #9ca3af;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
