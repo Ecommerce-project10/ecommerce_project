@@ -11,9 +11,9 @@ import cloudinary
 import cloudinary.uploader
 import dotenv
 import os
-# Load environment variables from .env file
+
 dotenv.load_dotenv()
-# Configure Cloudinary with environment variables
+
 cloudinary.config( 
     cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"), 
     api_key = os.getenv("CLOUDINARY_API_KEY"), 
@@ -21,11 +21,12 @@ cloudinary.config(
     secure=True
 )
 
-# Create your views here.
+
 def products(request):
     all_products =  list(Product.objects.all())
+    categories = Product.objects.values_list('category', flat=True).distinct()
     # repeated_products = all_products * 50  
-    return render(request, 'products.html', {'products': all_products})
+    return render(request, 'products.html', {'products': all_products,'categories':categories})
 
 def add_products(request):
     return render(request, 'add-product.html')

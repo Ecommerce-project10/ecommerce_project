@@ -17,7 +17,7 @@
         <div class="hero-content">
             <h1>The Future of Shopping</h1>
             <p>Discover extraordinary products with revolutionary technology</p>
-            <a href="#" class="cta-button">
+            <a href="{% url 'products' %}" class="cta-button">
                 Explore Now
                 <i class="fas fa-arrow-right"></i>
             </a>
@@ -26,22 +26,7 @@
 
     <section class="features">
         <div class="container">
-            {% if messages %}
-                <div class="mb-3">
-                    {% for message in messages %}
-                        {% if message.tags == "error" %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {% elif message.tags == "debug" %}
-                        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
-                        {% else %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {% endif %}
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+            {% include 'message.html' %}
             <div class="section-title">
                 <h2>Why Choose Gitmarket</h2>
                 <p>Experience shopping like never before with our cutting-edge platform</p>

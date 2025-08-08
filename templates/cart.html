@@ -18,59 +18,74 @@
     <section class="cart-header">
         <div class="container">
             <h1><i class="fas fa-shopping-cart me-3 mt-5"></i>Shopping Cart</h1>
-            <p class="cart-count">3 items in your cart</p>
+            <p class="cart-count">{{ cart|length }} item in your cart</p>
         </div>
     </section>
+    
 
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Success Alert (if item was added) -->
-            <div class="alert alert-success d-none" id="cartAlert">
-                <i class="fas fa-check-circle me-2"></i>
-                <span id="alertMessage">Item updated successfully!</span>
-            </div>
-
+            {% include 'message.html' %}
             <div class="cart-container">
-                <!-- Cart Items Section -->
                 <div class="cart-items-section">
                     <div class="cart-items-header">
                         <h3 class="cart-items-title">Your Items</h3>
-                        <button class="clear-cart-btn" onclick="clearCart()">
-                            <i class="fas fa-trash me-1"></i>Clear Cart
-                        </button>
-                    </div>
-
-                    <!-- Cart Item 1 -->
-                    <div class="cart-item" data-id="1">
-                        <div class="cart-item-image">
-                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop" alt="Nike Sneakers">
-                        </div>
-                        <div class="cart-item-details">
-                            <h4 class="cart-item-title">Premium Nike Sneakers</h4>
-                            <p class="cart-item-category">Footwear</p>
-                            <p class="cart-item-price">$159.99</p>
-                        </div>
-                        <div class="cart-item-actions">
-                            <div class="cart-quantity-controls">
-                                <button class="quantity-btn" onclick="updateQuantity(1, -1)">−</button>
-                                <span class="cart-quantity-display" id="qty-1">2</span>
-                                <button class="quantity-btn" onclick="updateQuantity(1, 1)">+</button>
-                            </div>
-                            <button class="remove-item-btn" onclick="removeItem(1)">
-                                <i class="fas fa-times"></i>
+                        <form action="{% url 'delete_all' %}">
+                            {%csrf_token%}
+                            <button class="clear-cart-btn" type="submit">
+                                <i class="fas fa-trash me-1"></i>Clear Cart
                             </button>
-                        </div>
+                        </form>
                     </div>
-                </div>
 
+                    {% if cart %}
+                        {% for item in cart %}
+                        <div class="cart-item d-flex flex-column flex-md-row justify-content-between align-items-center p-3 mb-4">
+                            <div class="d-flex flex-column flex-md-row align-items-center">
+                                <div class="cart-item-image">
+                                    <img src="{{ item.image }}" alt="{{ item.product.name }}" loading="lazy">
+                                </div>
+                                <div class="cart-item-details ms-md-3 mt-3 mt-md-0 text-center text-md-start">
+                                    <h4 class="cart-item-title">{{ item.name|truncatewords:4 }}</h4>
+                                    <p class="cart-item-category">{{ item.category }}</p>
+                                    <p class="cart-item-price">${{ item.price }}</p>
+                                </div>
+                            </div>
+                        
+                            <div class="cart-item-actions d-flex gap-3 mt-3 mt-md-0">
+                                <form action="{% url 'update_quantity' item.product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="cart-quantity-controls">
+                                        <button class="quantity-btn" name="action" value="decrease" type="submit">−</button>
+                                        <span class="cart-quantity-display">{{ item.quantity }}</span>
+                                        <button class="quantity-btn" name="action" value="increase" type="submit">+</button>
+                                    </div>
+                                </form>
+                                <form action="{% url 'delete_item' item.product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="remove-item-btn" type="submit">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <h3>Your cart is empty</h3>
+                            <p>Looks like you haven't added anything to your cart yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
                 <!-- Cart Summary -->
                 <div class="cart-summary">
                     <h3 class="summary-title">Order Summary</h3>
-                    
                     <div class="summary-row">
-                        <span class="summary-label">Subtotal (4 items)</span>
-                        <span class="summary-value" id="subtotal">$709.97</span>
+                        <span class="summary-label">Subtotal ({{cart|length}} items)</span>
+                        <span class="summary-value" id="subtotal">{{ subtotal }}</span>
                     </div>
                     
                     <div class="summary-row">
@@ -82,7 +97,7 @@
                         <span class="summary-label">Tax</span>
                         <span class="summary-value" id="tax">$56.80</span>
                     </div>
-
+                    
                     <!-- Promo Code Section -->
                     <div class="promo-code-section">
                         <div class="promo-input-group">
@@ -93,13 +108,19 @@
                     
                     <div class="summary-row summary-total">
                         <span class="summary-label">Total</span>
-                        <span class="summary-value" id="total">$781.77</span>
+                        <span class="summary-value" id="total">${{total_price|floatformat:2}}</span>
                     </div>
                     
                     <a href="{% url 'checkout' %}">
-                        <button class="checkout-btn" onclick="proceedToCheckout()">
-                            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
-                        </button>
+                        {% if cart|length == 0 %}
+                            <button class="checkout-btn" disabled>
+                                <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                            </button>
+                        {%else%}
+                            <button class="checkout-btn">
+                                <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                            </button>
+                        {% endif%}
                     </a>
                 </div>
             </div>
@@ -117,14 +138,43 @@
                     <i class="fas fa-heart me-2"></i>Saved for Later
                 </h3>
                 <div class="saved-items-grid">
-                    <div class="saved-item-card">
+                    {% if saved_item %}
+                    {% for saved in saved_item %}
+                    <div class="saved-item-card" style="position: relative;">
                         <div class="saved-item-image">
-                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" alt="Headphones">
+                            <img src="{{saved.image}}" alt="{{saved.name}}" loading="lazy">
                         </div>
-                        <h5 class="saved-item-title">Wireless Headphones</h5>
-                        <p class="saved-item-price">$199.99</p>
-                        <button class="move-to-cart-btn" onclick="moveToCart(4)">Move to Cart</button>
+                    
+                        
+                        <form method="post" action="{% url 'remove_saved_item' saved.product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="bookmark">
+                                <i class="fa-solid fa-bookmark"></i>
+                            </button>
+                        </form>  
+                    
+                        <h5 class="saved-item-title">{{ saved.name|truncatewords:2 }}</h5>
+                        <p class="saved-item-price">${{saved.price}}</p>
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                            <form action="{% url 'add_to_cart' saved.product.id %}" method="post">
+                                {% csrf_token %}
+                                {% if saved.product.quantity == 0 %}
+                                    <button class="move-to-cart-btn" style="font-size: 0.8rem;" disabled>Out of Stock <i class="fa-solid fa-ban"></i></button>
+                                {%else%}
+                                    <button class="move-to-cart-btn" type="submit">Move to Cart</button>
+                                {%endif%}
+                            </form>
+                            <form action="{% url 'remove_saved_item' saved.product.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="remove-item-btn" type="submit">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
+                    
+                    {%endfor%}
+                    {%endif%}
                 </div>
             </div>
         </div>
