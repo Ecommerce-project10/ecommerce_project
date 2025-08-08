@@ -14,7 +14,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'login' %}">Gitmarket</a>
+            <a class="navbar-brand" href="{% url 'login' %}"><i class="fa-solid fa-shop"></i> Gitmarket</a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -34,12 +34,18 @@
                 
                 <!-- User Menu -->
                 <div class="d-flex gap-2 ms-auto">
-                    {% if user.is_authenticated and user.profile %}
+                    {% if user.is_authenticated %}
                         <!-- Cart -->
-                        <a href="{% url 'cart' %}" class="btn btn-custom btn-signin">
-                            <i class="fas fa-shopping-cart me-1"></i>Cart ({{ cart_count|default:0 }})
+                        <a href="{% url 'cart' %}" class="btn btn-custom btn-signin position-relative">
+                            <i class="fas fa-shopping-cart me-1"></i>Cart
+                            {% if cart_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ cart_count }}
+                                </span>
+                            {% endif %}
                         </a>
                         
+                                                
                         <!-- Profile Dropdown -->
                         <div class="dropdown">
                             <a href="#" class="btn btn-custom btn-signin dropdown-toggle" data-bs-toggle="dropdown">
@@ -48,7 +54,15 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <!-- Common Links -->
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">My Profile</a></li>
-                                <li><a class="dropdown-item" href="">My Orders</a></li>
+                                <li class="align-items-center">
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'history_order' %}">
+                                        My Orders
+                                        <span class="badge rounded-pill bg-danger ms-2">
+                                            {{ n_order }}
+                                        </span>
+                                    </a>
+                                </li>
+                                
                                 
                                 <!-- Customer Links -->
                                 {% if user.profile.account_type == "customer" %}

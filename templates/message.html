@@ -1,0 +1,35 @@
+{% if messages %}
+    <div class="mb-3">
+        {% for message in messages %}
+            {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show auto-dismiss" role="alert">
+                    <i class="fa-solid fa-circle-xmark me-2"></i>
+            {% elif message.tags == "debug" %}
+                <div class="alert alert-secondary alert-dismissible fade show auto-dismiss" role="alert">
+                    <i class="fa-solid fa-bug me-2"></i>
+            {% elif message.tags == "warning" %}
+                <div class="alert alert-warning alert-dismissible fade show auto-dismiss" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+            {% else %}
+                <div class="alert alert-success alert-dismissible fade show auto-dismiss" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+            {% endif %}
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<script>
+    // Auto-dismiss alerts after 2 seconds
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.auto-dismiss');
+        alerts.forEach(alert => {
+            // Fade out first (optional, for smoother UX)
+            alert.classList.remove('show');
+            // Then remove completely after 0.5s
+            setTimeout(() => alert.remove(), 500);
+        });
+    }, 3000);
+</script>
