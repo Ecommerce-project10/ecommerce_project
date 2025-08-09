@@ -6,11 +6,15 @@ from .forms import UserRegistrationForm
 from django.contrib.auth.models import User 
 from django.contrib import messages
 from accounts.models import Create_USER
+from products.models import Product
+from orders.models import Create_order
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
+from decimal import Decimal
 
 # Create your views here.
 def home(request):
@@ -99,3 +103,50 @@ def profile(request):
 
     messages.error(request, 'You need to log in to view your profile.')
     return redirect('login')
+
+def admin_dash(request):
+    user = request.user
+    total_users = User.objects.count()
+    total_products = Product.objects.count()
+    total_orders = Create_order.objects.count()
+    all_users = User.objects.filter()
+    total_items = Product.objects.filter().aggregate(
+        total  = Sum('quantity')
+    )['total'] or Decimal(0)
+    context = {
+        'user':user,
+        'total_products':total_products,
+        'total_users':total_users,
+        'total_orders':total_orders,
+        'all_users':all_users,
+        'total_items':total_items,
+    }
+    return render(request,'admin_dashboard.html',context)
+
+def delete_user(request, user_id):
+    if request.method == "POST":
+        user = get_object_or_404(User, id=user_id)
+        username = user.get_username()
+        user.delete()
+        messages.success(request, f'User "{username}" has been deleted successfully.')
+        return redirect(request.META.get('HTTP_REFERER', 'home'))
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+def block_user(request, user_id):
+    if request.method == "POST":
+        user = get_object_or_404(User, id=user_id)
+        username = user.get_username()
+        user.is_active = False 
+        user.save()
+        messages.success(request, f'User "{username}" has been blocked successfully.')
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+def Add_superuser(request, user_id):
+    if request.method == "POST":
+        user = get_object_or_404(User, id=user_id)
+        username = user.get_username()
+        user.is_superuser = True 
+        user.is_staff = True 
+        user.save()
+        messages.success(request, f'User "{username}" has been Superuser and added to stuff successfully.')
+    return redirect(request.META.get('HTTP_REFERER', 'home'))

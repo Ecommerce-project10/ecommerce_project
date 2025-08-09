@@ -7,4 +7,5 @@ class Create_USER(models.Model):
         ('seller', 'Seller'),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE ,related_name='profile')
-    account_type = models.CharField(max_length=10, choices=ACCOUNT_TYPES , default='customer') 
+    account_type = models.CharField(max_length=10, choices=ACCOUNT_TYPES , default='customer')
+    
