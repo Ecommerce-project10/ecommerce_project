@@ -19,6 +19,7 @@ from django.urls import path ,include
 from accounts import views
 from django.conf import settings
 from django.conf.urls.static import static
+from products.views import seller_dashboard,seller_manage,del_product
 urlpatterns = [
     path('', views.home, name='home'),
     path('home/', views.home, name='home'),
@@ -26,6 +27,10 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
+    path('dashboard/<str:user>', seller_dashboard ,name='seller_dashboard'),
+    path('dashboard/manage/<str:user>', seller_manage ,name='seller_manage'),
+    path('dashboard/manage/del_product/<int:product_id>', del_product ,name='del_product'),
+
 ]
 
 if settings.DEBUG:

@@ -161,7 +161,7 @@
                                         <div class="product-price">${{ product.price }}</div>
                                         <div class="shopping-cart">
                                             {% if product.quantity == 0 %}
-                                                <button type="submit" title="Out of stock" class="btn-add-to-cart" disabled><i class="fa-solid fa-cart-shopping"></i></button>
+                                                <button type="submit" title="Out of stock" class="btn-add-to-cart" disabled><i class="fa-solid fa-cart-shopping" style="color: #b1b1b1;"></i></button>
                                             {% elif product.user == user %}
                                                 <button type="submit" title="You are the owner can't add to cart" class="btn-add-to-cart" disabled><i class="fa-solid fa-ban"></i></button>
                                             {% else %}

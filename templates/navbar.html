@@ -69,7 +69,7 @@
                                     <li><a class="dropdown-item" href="">Wishlist</a></li>
                                 {% else %}
                                     <!-- Seller Links -->
-                                    <li><a class="dropdown-item" href="">Seller Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'seller_dashboard' user.username %}">Seller Dashboard</a></li>
                                     <li><a class="dropdown-item" href="">My Products</a></li>
                                     <li><a class="dropdown-item" href="{% url 'add_products' %}">Add New Product</a></li>
                                 {% endif %}
