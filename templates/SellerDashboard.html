@@ -1,0 +1,73 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {{user.username}} Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <div class="container dashboard-container mt-3">
+        <div class="dashboard-header">
+            <h1 class="welcome-text">Seller Dashboard</h1>
+            <p class="subtitle">Welcome back, <span class="navbar-brand">{{ seller.name }}</span> Here's your business overview</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon products">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-value">{{ seller.total_products }}</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orders">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                    <div class="stat-value">{{ seller.total_item_orderd }}</div>
+                    <div class="stat-label">Total Items Orderd</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon orders">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-value">{{ seller.orders_completed }}</div>
+                    <div class="stat-label">Completed Orders</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon current">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">{{ seller.current_orders }}</div>
+                    <div class="stat-label">Current Orders</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon earnings">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value">{{ seller.earnings }}</div>
+                    <div class="stat-label">Total Earnings</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'seller_manage' user.username %}" class="action-btn d-flex align-items-center justify-content-center mb-5">
+                <i class="fas fa-cogs me-2"></i>
+                Manage Products
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

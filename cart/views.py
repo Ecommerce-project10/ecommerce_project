@@ -54,16 +54,24 @@ def add_to_cart(request, product_id):
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 @login_required
-def saved_product(request,product_id):
+def saved_product(request, product_id):
     product = get_product_by_id(request, product_id)
-    saved_items , create = Saved.objects.get_or_create(
+
+    saved_item, created = Saved.objects.get_or_create(
         user=request.user, 
         product=product,
     )
-    saved_items.image = product.image
-    saved_items.name = product.name
-    saved_items.price = product.price
-    saved_items.save()
+
+    saved_item.image = product.image
+    saved_item.name = product.name
+    saved_item.price = product.price
+    saved_item.save()
+
+    if created:
+        messages.success(request, f'"{product.name}" has been added to your saved products.')
+    else:
+        messages.info(request, f'"{product.name}" is already in your saved products.')
+
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 @login_required

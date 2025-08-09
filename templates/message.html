@@ -1,35 +1,71 @@
 {% if messages %}
-    <div class="mb-3">
-        {% for message in messages %}
-            {% if message.tags == "error" %}
-                <div class="alert alert-danger alert-dismissible fade show auto-dismiss" role="alert">
-                    <i class="fa-solid fa-circle-xmark me-2"></i>
-            {% elif message.tags == "debug" %}
-                <div class="alert alert-secondary alert-dismissible fade show auto-dismiss" role="alert">
-                    <i class="fa-solid fa-bug me-2"></i>
-            {% elif message.tags == "warning" %}
-                <div class="alert alert-warning alert-dismissible fade show auto-dismiss" role="alert">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
-            {% else %}
-                <div class="alert alert-success alert-dismissible fade show auto-dismiss" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-            {% endif %}
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="toast-container position-fixed end-0 p-3" style="top: 100px; z-index: 1100;">
+    {% for message in messages %}
+        {% if message.tags == "error" %}
+            <div class="toast align-items-center text-white bg-danger border-0 show slide-in" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-xmark me-2"></i>{{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-        {% endfor %}
-    </div>
+            </div>
+        {% elif message.tags == "debug" %}
+            <div class="toast align-items-center text-white bg-secondary border-0 show slide-in" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-bug me-2"></i>{{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        {% elif message.tags == "warning" %}
+            <div class="toast align-items-center text-dark bg-warning border-0 show slide-in" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ message }}
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        {% else %}
+            <div class="toast align-items-center text-white bg-success border-0 show slide-in" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas fa-check-circle me-2"></i>{{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
 {% endif %}
 
+<style>
+    .slide-in {
+        animation: slideInRight 0.5s ease-out;
+    }
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+</style>
+
 <script>
-    // Auto-dismiss alerts after 2 seconds
-    setTimeout(function() {
-        const alerts = document.querySelectorAll('.auto-dismiss');
-        alerts.forEach(alert => {
-            // Fade out first (optional, for smoother UX)
-            alert.classList.remove('show');
-            // Then remove completely after 0.5s
-            setTimeout(() => alert.remove(), 500);
+    // Auto-dismiss Bootstrap toasts after 5 seconds
+    document.addEventListener("DOMContentLoaded", function () {
+        const toasts = document.querySelectorAll('.toast');
+        toasts.forEach((toastEl) => {
+            setTimeout(() => {
+                bootstrap.Toast.getOrCreateInstance(toastEl).hide();
+            }, 5000);
         });
-    }, 3000);
+    });
 </script>
