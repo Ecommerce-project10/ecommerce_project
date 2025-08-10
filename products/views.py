@@ -10,7 +10,7 @@ from .forms import ProductForm
 from .models import Product
 from orders.models import Create_order , OrderItem
 from decimal import Decimal
-from django.db.models import Sum
+from django.db.models import Sum , Count
 import cloudinary
 import cloudinary.uploader
 import dotenv
@@ -75,7 +75,7 @@ def seller_dashboard(request,user):
     total_products = Product.objects.filter(user=seller_user).count()
     seller_items = OrderItem.objects.filter(product__user=seller_user)
     total_item_ordered = seller_items.count()
-    orders_completed = seller_items.filter(order__status="Delivered").count()
+    orders_completed = Create_order.objects.filter(items__product__user=seller_user,status="Delivered").distinct().count()
     current_orders = seller_items.filter(order__status="pending").count()
     seller_order_ids = seller_items.values_list('order_id', flat=True).distinct()
     
