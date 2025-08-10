@@ -82,6 +82,7 @@ TEMPLATES = [
                 'cart.context_processors.saved_products',
                 'cart.context_processors.cart_item',
                 'cart.context_processors.order_count',
+                'cart.context_processors.product_count',
             ],
         },
     },

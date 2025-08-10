@@ -62,15 +62,36 @@
                                         </span>
                                     </a>
                                 </li>
-                                
+                                <li class="align-items-center">
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'Wishlist_product' %}">
+                                        My Wishlist
+                                        <span class="badge rounded-pill bg-danger ms-2">
+                                            {{ n_saved }}
+                                        </span>
+                                    </a>
+                                </li>
                                 
                                 <!-- Customer Links -->
                                 {% if user.profile.account_type == "customer" %}
-                                    <li><a class="dropdown-item" href="">Wishlist</a></li>
+                                    <li class="align-items-center">
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'Wishlist_product' %}">
+                                            My Wishlist
+                                            <span class="badge rounded-pill bg-danger ms-2">
+                                                {{ n_saved }}
+                                            </span>
+                                        </a>
+                                    </li>
                                 {% else %}
                                     <!-- Seller Links -->
                                     <li><a class="dropdown-item" href="{% url 'seller_dashboard' user.username %}">Seller Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="">My Products</a></li>
+                                    <li class="align-items-center">
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'seller_manage' user.username %}">
+                                            My Products
+                                            <span class="badge rounded-pill bg-danger ms-2">
+                                                {{ n_products }}
+                                            </span>
+                                        </a>
+                                    </li>
                                     <li><a class="dropdown-item" href="{% url 'add_products' %}">Add New Product</a></li>
                                 {% endif %}
                                 

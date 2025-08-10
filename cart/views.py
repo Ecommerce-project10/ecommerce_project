@@ -75,6 +75,11 @@ def saved_product(request, product_id):
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 @login_required
+def Wishlist_product(request):
+    context = cart_item(request)
+    return render(request , 'savedProduct.html' , {'saved_item':context['saved_item']})
+
+@login_required
 def remove_saved_item(request , product_id):
     Saved_itm = Saved.objects.filter(user=request.user,product_id=product_id).first()
     if Saved_itm:
