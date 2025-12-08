@@ -9,7 +9,6 @@ body {
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
-    overflow: hidden;
     position: relative;
 }
 
@@ -19,7 +18,6 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     z-index: -1;
     pointer-events: none; 
 }
@@ -92,12 +90,23 @@ body {
     width: 100%;
     max-width: 900px;
     position: relative;
-    z-index: 2;
 }
 
 .dashboard-header {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: white;
+    animation: slideUp 0.8s ease-out;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header2 {
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 3rem 2rem;
