@@ -14,7 +14,7 @@
 <body>
     {% include 'navbar.html' %}
     {% include 'message.html' %}
-    <div class="container dashboard-header p-5 mt-3 mb-5 ">
+    <div class="container dashboard-header2 p-5 mt-3 mb-5 py-4">
 
         <!-- Breadcrumb Navigation -->
         <nav aria-label="breadcrumb">
@@ -107,7 +107,7 @@
                             </td>
                             <td>${{ product.price|floatformat:2 }}</td>
                             <td>
-                                {% if product.quantity > 10 %}
+                                {% if product.quantity > 15 %}
                                 <span class="badge bg-success">{{ product.quantity }} units</span>
                                 {% elif product.quantity > 0 %}
                                 <span class="badge bg-warning text-dark">{{ product.quantity }} units</span>
